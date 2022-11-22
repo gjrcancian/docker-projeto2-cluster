@@ -4,7 +4,8 @@
 machines = {
   "master" => {"memory" => "1024", "cpu" => "1", "ip" => "100", "image" => "bento/ubuntu-22.04"},
   "node01" => {"memory" => "1024", "cpu" => "1", "ip" => "101", "image" => "bento/ubuntu-22.04"},
-  "node02" => {"memory" => "1024", "cpu" => "1", "ip" => "102", "image" => "bento/ubuntu-22.04"}
+  "node02" => {"memory" => "1024", "cpu" => "1", "ip" => "102", "image" => "bento/ubuntu-22.04"},
+  "node03" => {"memory" => "1024", "cpu" => "1", "ip" => "103", "image" => "bento/ubuntu-22.04"}
 }
 
 Vagrant.configure("2") do |config|
@@ -21,11 +22,12 @@ Vagrant.configure("2") do |config|
         
       end
       machine.vm.provision "shell", path: "docker.sh"
-      
       if "#{name}" == "master"
         machine.vm.provision "shell", path: "master.sh"
       else
         machine.vm.provision "shell", path: "worker.sh"
+        machine.vm.disk :disk, name: "backup", size: "10GB"
+
       end
 
     end
